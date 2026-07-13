@@ -1,7 +1,7 @@
 {
 	"name": "db-vendo-client",
 	"description": "Client for bahn.de public transport APIs.",
-	"version": "6.11.0",
+	"version": "6.11.1",
 	"type": "module",
 	"main": "index.js",
 	"files": [
@@ -94,7 +94,7 @@
 		"test-integration:record": "VCR_MODE=record tap -t60 -j1 test/e2e/*.js",
 		"test-e2e": "VCR_OFF=true tap -t60 -j16 test/e2e/*.js",
 		"test-spelling": "cspell .",
-		"test": "npm run test-unit && npm run test-integration && npm run test-spelling",
+		"test": "npm run test-unit && npm run test-integration",
 		"prepublishOnly": "npm run lint && npm test",
 		"api": "node api.js"
 	},

@@ -6,6 +6,9 @@
 ![ISC-licensed](https://img.shields.io/github/license/public-transport/db-vendo-client.svg)
 [![support Jannis via GitHub Sponsors](https://img.shields.io/badge/support%20Jannis-donate-fa7664.svg)](https://github.com/sponsors/derhuerst)
 
+> [!IMPORTANT]
+> The DB APIs are subject to haphazard blocking and have become very unrealiable to use. You may want to [consider alternative ways to obtain the data you need.](https://github.com/derhuerst/db-rest/blob/6/docs/readme.md#why-not-to-use-this-api), e.g. [motis-fptf-client](https://github.com/motis-project/motis-fptf-client) (a drop-in replacement for db-vendo-client/hafas-client) in conjunction with https://transitous.org (please consider the [usage policy](https://transitous.org/api/) there) or a self-hosted [MOTIS](https://github.com/motis-project/motis) instance.
+
 The following [FPTF](https://github.com/public-transport/friendly-public-transport-format)/[hafas-client](https://github.com/public-transport/hafas-client/) endpoints are supported (depending on the chosen profile, see below):
 
 * `journeys()`, `refreshJourney()` including tickets and bestprice option
@@ -39,9 +42,6 @@ Depending on the configured profile, db-vendo-client will use multiple different
 | assumed backend API stability | less stable | more stable | less stable | more stable |
 | quotas | 60 requests per minute (IPv4), current backend possibly shut off soon | 60 requests per minute (IPv4), possibly aggressive blocking | aggressive blocking (IPv4/IPv6) | depends on API key |
 
-
-> [!IMPORTANT]
-> If you think that for your project, quotas may become an issue, [consider alternative ways to obtain the data you need.](https://github.com/derhuerst/db-rest/blob/6/docs/readme.md#why-not-to-use-this-api), e.g. [motis-fptf-client](https://github.com/motis-project/motis-fptf-client) (a drop-in replacement for db-vendo-client/hafas-client) in conjunction with https://transitous.org (please consider the [usage policy](https://transitous.org/api/) there) or a self-hosted [MOTIS](https://github.com/motis-project/motis) instance.
 
 Feel free to report anything that you stumble upon via Issues or create a PR :)
 

@@ -1,3 +1,5 @@
+import {stringify} from 'qs';
+
 const formatStationBoardReq = (ctx, station, type) => {
 	const {profile, opt} = ctx;
 
@@ -6,7 +8,8 @@ const formatStationBoardReq = (ctx, station, type) => {
 		timeStart: profile.formatTime(profile, opt.when, true),
 		timeEnd: profile.formatTime(profile, opt.when.getTime() + opt.duration * 60 * 1000, true),
 		includeStationGroup: opt.includeRelatedStations,
-		maxTransportsPerType: opt.results === Infinity ? undefined : opt.results,
+		// omit the param unless an actual limit was requested (default opt.results is null)
+		maxTransportsPerType: (opt.results === Infinity || opt.results == null) ? undefined : opt.results,
 		includeMessagesDisruptions: opt.remarks,
 		sortBy: 'TIME_SCHEDULE',
 	};
@@ -18,8 +21,9 @@ const formatStationBoardReq = (ctx, station, type) => {
 	}
 	return {
 		endpoint: profile.boardEndpoint,
-		path: type + '/' + station,
-		query: query,
+		// RIS::Boards is an OpenAPI form/explode API: array params must be repeated
+		// (filterTransports=A&filterTransports=B), not serialized in the bracketed form
+		path: type + '/' + station + '?' + stringify(query, {arrayFormat: 'repeat', encodeValuesOnly: true}),
 		method: 'get',
 		headers: {
 			'Db-Client-Id': process.env.DB_CLIENT_ID,

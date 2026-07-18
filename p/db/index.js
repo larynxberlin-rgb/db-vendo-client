@@ -3,6 +3,7 @@ import {products} from '../../lib/products.js';
 
 // journeys()
 import {formatJourneysReq} from '../dbnav/journeys-req.js';
+import {parseJourney} from '../dbnav/parse-journey.js';
 const {journeysEndpoint} = base;
 const {bestpriceEndpoint} = base;
 
@@ -25,7 +26,7 @@ import {formatNearbyReq} from '../dbnav/nearby-req.js';
 const {nearbyEndpoint} = base;
 
 // trip()
-import {formatTripReq} from './trip-req.js';
+import {formatTripReq} from '../dbnav/trip-req.js';
 const {tripEndpoint} = base;
 
 // arrivals(), departures()
@@ -39,6 +40,7 @@ const profile = {
 	products,
 
 	formatJourneysReq,
+	parseJourney,
 	journeysEndpoint,
 	bestpriceEndpoint,
 

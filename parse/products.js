@@ -1,7 +1,8 @@
-const parseProducts = ({profile}, products) => {
+const parseProducts = ({profile}, products = []) => {
 	const res = {};
+	const list = products || [];
 	for (let product of profile.products) {
-		res[product.id] = Boolean(products.find(p => p == product.vendo || p == product.dbnav));
+		res[product.id] = Boolean(list.find(p => p == product.vendo || p == product.dbnav));
 	}
 	return res;
 };

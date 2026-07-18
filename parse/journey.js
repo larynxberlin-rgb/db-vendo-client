@@ -7,7 +7,7 @@ const createFakeWalkingLeg = (prevLeg, leg) => {
 	};
 	fakeWalkingLeg.departure = prevLeg.arrival;
 	fakeWalkingLeg.plannedDeparture = prevLeg.plannedArrival;
-	fakeWalkingLeg.departureDelay = prevLeg.delay;
+	fakeWalkingLeg.departureDelay = prevLeg.arrivalDelay;
 	fakeWalkingLeg.arrival = fakeWalkingLeg.departure;
 	fakeWalkingLeg.plannedArrival = fakeWalkingLeg.plannedDeparture;
 	fakeWalkingLeg.arrivalDelay = fakeWalkingLeg.departureDelay;
@@ -18,7 +18,11 @@ const createFakeWalkingLeg = (prevLeg, leg) => {
 };
 
 const parseLocationsFromCtxRecon = (ctx, j) => {
-	return (j.ctxRecon || j.kontext)
+	const raw = j.ctxRecon || j.kontext;
+	if (!raw) {
+		return {};
+	}
+	return raw
 		.split('$')
 		.map(e => ctx.profile.parseLocation(ctx, {id: e}))
 		.filter(e => e.latitude || e.location?.latitude)
@@ -43,10 +47,19 @@ const trimJourneyId = (journeyId) => {
 const parseJourney = (ctx, jj) => { // j = raw journey
 	const {profile, opt} = ctx;
 	const j = jj.verbindung || jj;
-	const fallbackLocations = parseLocationsFromCtxRecon(ctx, j);
+	// Lazily parse fallback locations from the reconstruction context: it is only
+	// needed for legs that lack an inline stop list, and splitting/parsing the
+	// ctxRecon string is wasted work for the common case where legs carry full stops.
+	let fallbackLocationsCache;
+	const getFallbackLocations = () => {
+		if (fallbackLocationsCache === undefined) {
+			fallbackLocationsCache = parseLocationsFromCtxRecon(ctx, j);
+		}
+		return fallbackLocationsCache;
+	};
 	const legs = [];
 	for (const l of j.verbindungsAbschnitte) {
-		const leg = profile.parseJourneyLeg(ctx, l, null, fallbackLocations);
+		const leg = profile.parseJourneyLeg(ctx, l, null, getFallbackLocations);
 		if (legs.length > 0 && !legs[legs.length - 1].walking && !leg.walking) {
 			const fakeWalkingLeg = createFakeWalkingLeg(legs[legs.length - 1], leg);
 			legs.push(fakeWalkingLeg);

@@ -3,8 +3,8 @@ import {stringify} from 'qs';
 const formatStationBoardReq = (ctx, station, type) => {
 	const {profile, opt} = ctx;
 
-	if (opt.departure || opt.arrival) {
-		throw new Error('opt.departure/opt.arrival is not supported for profile dbbahnhof, can only query for current time.');
+	if (opt.whenExplicit) {
+		throw new Error('opt.when is not supported for profile dbbahnhof, it can only query for the current time.');
 	}
 	const evaNumbers = [station];
 	if (opt.moreStops) {

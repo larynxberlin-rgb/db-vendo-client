@@ -1,6 +1,9 @@
 const locationFallback = (id, name, fallbackLocations) => {
-	if (fallbackLocations && (id && fallbackLocations[id] || name && fallbackLocations[name])) {
-		return fallbackLocations[id] || fallbackLocations[name];
+	// `fallbackLocations` may be a plain lookup object or a lazy getter returning one
+	// (see parse/journey.js); resolve it only when a fallback is actually required.
+	const locs = typeof fallbackLocations === 'function' ? fallbackLocations() : fallbackLocations;
+	if (locs && (id && locs[id] || name && locs[name])) {
+		return locs[id] || locs[name];
 	}
 	return {
 		type: 'location',
@@ -117,7 +120,8 @@ const parseJourneyLeg = (ctx, pt, date, fallbackLocations) => { // pt = raw leg
 
 	if (cancelledDep || cancelledArr || pt.cancelled || pt.canceled) {
 		res.cancelled = true;
-		Object.defineProperty(res, 'canceled', {value: true});
+		// configurable so downstream (e.g. parseTrip) can re-sync the alias with `cancelled`
+		Object.defineProperty(res, 'canceled', {value: true, configurable: true});
 	}
 
 	const load = profile.parseLoadFactor(opt, pt.auslastungsmeldungen || pt.auslastungsInfos);

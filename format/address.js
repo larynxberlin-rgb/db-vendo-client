@@ -2,7 +2,7 @@ import {formatLocationIdentifier} from './location-identifier.js';
 import {formatCoord} from './coord.js';
 
 const formatAddress = (a) => {
-	if (a.type !== 'location' || !a.latitude || !a.longitude || !a.address) {
+	if (a.type !== 'location' || !Number.isFinite(a.latitude) || !Number.isFinite(a.longitude) || !a.address) {
 		throw new TypeError('invalid address');
 	}
 

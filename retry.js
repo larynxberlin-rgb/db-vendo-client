@@ -24,6 +24,13 @@ const withRetrying = (profile, retryOpts = {}) => {
 						Object.assign(abortErr, err);
 						throw abortErr;
 					}
+					// HTTP client errors (4xx) are not transient — fail fast instead of
+					// retrying with backoff. 429 (Too Many Requests) may recover, so retry it.
+					if (err.statusCode >= 400 && err.statusCode < 500 && err.statusCode !== 429) { // abort
+						const abortErr = new retry.AbortError(err);
+						Object.assign(abortErr, err);
+						throw abortErr;
+					}
 					throw err; // continue
 				});
 		};

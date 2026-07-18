@@ -1,11 +1,13 @@
 const formatTraveller = ({profile}, ageGroup, age, loyaltyCard) => {
-	const tvlrAgeGroup = age
+	// age 0 (an infant) is a valid value, so test for presence, not truthiness
+	const hasAge = age !== undefined && age !== null;
+	const tvlrAgeGroup = hasAge
 		? profile.ageGroupFromAge(age)
 		: ageGroup;
 	let r = {
 		typ: profile.ageGroupLabel[tvlrAgeGroup || profile.ageGroup.ADULT],
 		anzahl: 1,
-		alter: age
+		alter: hasAge
 			? [String(age)]
 			: [],
 		ermaessigungen: [profile.formatLoyaltyCard(loyaltyCard)],

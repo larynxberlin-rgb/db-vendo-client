@@ -5,7 +5,7 @@ const formatStopReq = (ctx, stopRef) => {
 
 	return {
 		endpoint: profile.stopEndpoint,
-		path: stopRef,
+		path: encodeURIComponent(stopRef),
 		headers: getHeaders('application/x.db.vendo.mob.location.v3+json'),
 		method: 'get',
 	};

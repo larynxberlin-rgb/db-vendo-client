@@ -1,7 +1,7 @@
 import {parseJourney as parseJourneyDefault} from '../../parse/journey.js';
 
 const parseJourney = (ctx, jj) => {
-	const legs = (jj.verbindung || jj).verbindungsAbschnitte;
+	const legs = (jj.verbindung || jj).verbindungsAbschnitte || [];
 	if (legs.length > 0) {
 		legs[0] = preprocessJourneyLeg(legs[0]);
 	}
@@ -24,8 +24,11 @@ const preprocessJourneyLeg = (pt) => { // fixes https://github.com/public-transp
 const correctRealtimeTimeZone = (planned, realtime) => {
 	if (planned && realtime) {
 		const timeZoneOffsetRegex = /([+-]\d\d:\d\d|Z)$/;
-		const timeZoneOffsetPlanned = timeZoneOffsetRegex.exec(planned)[0];
-		return realtime.replace(timeZoneOffsetRegex, timeZoneOffsetPlanned);
+		const match = timeZoneOffsetRegex.exec(planned);
+		if (!match) {
+			return realtime;
+		}
+		return realtime.replace(timeZoneOffsetRegex, match[0]);
 	}
 
 	return realtime;

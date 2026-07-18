@@ -1,5 +1,5 @@
 const parsePolyline = (ctx, p) => { // p = raw polylineGroup
-	const desc = p.polylineDescriptions || p.polylineDesc;
+	const desc = p.polylineDescriptions || p.polylineDesc || [];
 	if (desc.length < 1) {
 		return null;
 	}

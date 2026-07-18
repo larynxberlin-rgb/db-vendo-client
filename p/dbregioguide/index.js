@@ -15,6 +15,7 @@ const profile = {
 	journeysOutFrwd: false,
 	departuresGetPasslist: false,
 	departuresStbFltrEquiv: true,
+	departuresMoreStops: true,
 	trip: true,
 	radar: false,
 	refreshJourney: false,

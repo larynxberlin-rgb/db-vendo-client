@@ -7,6 +7,8 @@ const parseTrip = (ctx, t, id) => { // t = raw trip
 	delete trip.tripId;
 	delete trip.reachable;
 	trip.cancelled = Boolean(profile.parseCancelled(t) || trip.stopovers?.length && trip.stopovers?.every(s => s.cancelled));
+	// keep the non-enumerable `canceled` alias in sync with the (re)computed `cancelled`
+	Object.defineProperty(trip, 'canceled', {value: trip.cancelled, enumerable: false, configurable: true});
 
 	// TODO opt.scheduledDays
 	return trip;

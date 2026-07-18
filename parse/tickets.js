@@ -54,13 +54,13 @@ const parseTickets = (ctx, j) => {
 	const ang = j.reiseAngebote || parseOfferClusters(j.angebote?.angebotsCluster);
 	if (ang && ang.length > 0) { // if refreshJourney()
 		tickets = ang
-			.filter(s => s.typ == 'REISEANGEBOT' && !s.angebotsbeziehungList?.flatMap(b => b.referenzen)
+			.filter(s => s.typ == 'REISEANGEBOT' && !s.angebotsbeziehungList?.flatMap(b => b.referenzen || [])
 				.find(r => r.referenzAngebotsoption == 'PFLICHT'))
 			.map((s) => {
 				const p = {
 					name: s.name,
 					priceObj: {
-						amount: Math.round(s.preis?.betrag * 100),
+						amount: s.preis?.betrag != null ? Math.round(s.preis.betrag * 100) : null,
 						currency: s.preis?.waehrung,
 					},
 					firstClass: s.klasse == 'KLASSE_1' || Boolean(s.nutzungsInformationen?.find(i => i.klasse == 'KLASSE_1')),
